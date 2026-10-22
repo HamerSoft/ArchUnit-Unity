@@ -1,0 +1,26 @@
+{
+  "name": "com.hamersoft.archunit-unity",
+  "version": "0.1.0",
+  "displayName": "HamerSoft ArchUnit Unity",
+  "description": "ArchUnit for Unity3D.",
+  "unity": "2019.4",
+  "documentationUrl": "https://hamersoft.github.io/archunit-unity/",
+  "changelogUrl": "https://github.com/HamerSoft/archunit-unity/releases",
+  "licensesUrl": "License.md",
+  "keywords": [
+    "HamerSoft",
+    "Unity3D",
+    "ArchUnity",
+    "Arch",
+    "Unit",
+    "Testing",
+    "Test",
+    "Architecture"
+  ],
+  "author": {
+    "name": "HamerSoft",
+    "email": "r.hamers@hamersoft.com",
+    "url": "https://hamersoft.com"
+  },
+  "dependencies": {}
+}
