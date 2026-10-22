@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "displayName": "HamerSoft ArchUnit Unity",
   "description": "ArchUnit for Unity3D.",
-  "unity": "2019.4",
-  "documentationUrl": "https://hamersoft.github.io/archunit-unity/",
-  "changelogUrl": "https://github.com/HamerSoft/archunit-unity/releases",
+  "unity": "2021.2",
+  "documentationUrl": "https://github.com/HamerSoft/ArchUnit-Unity",
+  "changelogUrl": "https://github.com/HamerSoft/ArchUnit-Unity/releases",
+  "license": "MIT",
   "licensesUrl": "License.md",
   "keywords": [
     "HamerSoft",
@@ -19,8 +20,10 @@
   ],
   "author": {
     "name": "HamerSoft",
-    "email": "r.hamers@hamersoft.com",
-    "url": "https://hamersoft.com"
+    "url": "https://hamersoft.com",
+    "email": "r.hamers@hamersoft.com"
   },
-  "dependencies": {}
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.2"
+  }
 }
