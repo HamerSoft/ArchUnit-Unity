@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "displayName": "HamerSoft ArchUnit Unity",
   "description": "ArchUnit for Unity3D.",
-  "unity": "2021.2",
+  "unity": "2021.3",
   "documentationUrl": "https://github.com/HamerSoft/ArchUnit-Unity",
-  "changelogUrl": "https://github.com/HamerSoft/ArchUnit-Unity/releases",
+  "changelogUrl": "https://github.com/HamerSoft/ArchUnit-Unity/blob/main/CHANGELOG.md",
   "license": "MIT",
   "licensesUrl": "License.md",
   "keywords": [

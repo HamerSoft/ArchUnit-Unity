@@ -63,4 +63,4 @@ Types().That().ResideInAssembly(editor)
 
 ## License
 
-[MIT](License.md). Third-party licenses: [THIRDPARTY.md](THIRDPARTY.md).
+[MIT](License.md). Third-party licenses: [THIRDPARTY.md](THIRDPARTY.md). Changes: [CHANGELOG.md](CHANGELOG.md).
