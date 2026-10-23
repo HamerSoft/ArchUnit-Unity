@@ -7,6 +7,8 @@ PluginImporter:
   executionOrder: {}
   defineConstraints:
   - UNITY_INCLUDE_TESTS
+  - '!UNITY_7000_0_OR_NEWER'
+  - '!ARCHUNIT_CORECLR'
   isPreloaded: 0
   isOverridable: 1
   isExplicitlyReferenced: 0

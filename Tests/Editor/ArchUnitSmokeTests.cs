@@ -30,11 +30,17 @@ namespace HamerSoft.ArchUnitUnity.Tests
         }
 
         [Test]
-        public void Architecture_Loads_Via_Mono()
+        public void Architecture_Loads()
         {
             var architecture = BuildArchitecture();
 
             Assert.That(architecture.Classes.Any(c => c.FullName.Contains(nameof(SmokeTestAllowedClass))), Is.True);
+        }
+
+        [Test]
+        public void ScriptingBackend_IsMono_And_IsCoreClr_AreMutuallyExclusive()
+        {
+            Assert.That(ScriptingBackend.IsMono, Is.Not.EqualTo(ScriptingBackend.IsCoreClr));
         }
 
         [Test]
