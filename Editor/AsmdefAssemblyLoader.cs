@@ -12,6 +12,9 @@ namespace HamerSoft.ArchUnitUnity.Editor
 {
     public static class AsmdefAssemblyLoader
     {
+        private static readonly string[] ArchUnitNetDependencyNames =
+            { "Mono.Cecil", "Collections.Immutable" };
+
         [Serializable]
         private class AsmdefName
         {
@@ -62,15 +65,16 @@ namespace HamerSoft.ArchUnitUnity.Editor
                 return loader.Build();
             }
             catch (Exception e) when (e is FileLoadException or TypeLoadException &&
-                                       e.Message.Contains("Collections.Immutable"))
+                                       ArchUnitNetDependencyNames.Any(e.Message.Contains))
             {
                 throw new InvalidOperationException(
-                    "ArchUnitNET failed to load System.Collections.Immutable. Under the CoreCLR scripting " +
-                    $"backend ({nameof(ScriptingBackend)}.{nameof(ScriptingBackend.IsCoreClr)} = {ScriptingBackend.IsCoreClr}), " +
-                    "this usually means the bundled Plugins/CoreCLR/System.Collections.Immutable.dll is " +
-                    "conflicting with the copy CoreCLR already ships inbox. Try excluding the bundled copy " +
-                    "entirely for CoreCLR by removing UNITY_7000_0_OR_NEWER/ARCHUNIT_CORECLR from its plugin " +
-                    "define constraints, or flip ARCHUNIT_CORECLR if you're on the wrong variant.", e);
+                    "ArchUnitNET failed to load one of its bundled dependencies " +
+                    $"(Mono.Cecil, Mono.Cecil.Rocks, System.Collections.Immutable) under the " +
+                    $"{(ScriptingBackend.IsCoreClr ? "CoreCLR" : "Mono")} scripting backend. Check that the " +
+                    "right variant under Plugins/ vs Plugins/CoreCLR/ is enabled for this backend " +
+                    "(their .dll.meta define constraints gate on UNITY_7000_0_OR_NEWER / ARCHUNIT_CORECLR) " +
+                    "and that nothing else in the project already loaded a conflicting copy of the same assembly.",
+                    e);
             }
         }
     }

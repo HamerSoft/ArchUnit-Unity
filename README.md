@@ -66,15 +66,23 @@ Types().That().ResideInAssembly(editor)
 
 Unity 7 removes the Mono-based Editor in favor of CoreCLR; Unity 6.7/6.8 offer CoreCLR as an
 experimental, opt-in backend alongside Mono. `ArchUnitNET.dll` and `StronglyConnectedComponents.dll`
-are .NET Standard and run under either backend unchanged. The one dependency that differs is
-`System.Collections.Immutable`, which Mono's BCL doesn't ship but CoreCLR does — bundling the same
-copy for both risks a duplicate-assembly load failure under CoreCLR, so this package ships two
-variants gated by `PluginImporter` define constraints:
+are .NET Standard and run under either backend unchanged, but two of ArchUnitNET's own runtime
+dependencies don't travel as cleanly, so this package ships a Mono variant and a CoreCLR variant of
+each, gated by `PluginImporter` define constraints:
 
-- `Plugins/System.Collections.Immutable.dll` — loads when `UNITY_7000_0_OR_NEWER` and
-  `ARCHUNIT_CORECLR` are both absent (Mono).
-- `Plugins/CoreCLR/System.Collections.Immutable.dll` — loads when `UNITY_7000_0_OR_NEWER` or
-  `ARCHUNIT_CORECLR` is defined.
+- `Mono.Cecil.dll` / `Mono.Cecil.Rocks.dll` — ArchUnitNET's hard dependency for reading assembly
+  metadata. Under Mono this has always been satisfied implicitly by Unity's own
+  `com.unity.nuget.mono-cecil` package; this package never bundled it. That package doesn't exist
+  in Unity 7 projects, which surfaces as Unity flagging `ArchUnitNET.dll` itself as a "broken
+  assembly" at code-reload time (confirmed against a live Unity 7 alpha Editor) — so
+  `Plugins/CoreCLR/Mono.Cecil.dll` and `Plugins/CoreCLR/Mono.Cecil.Rocks.dll` (the exact `0.11.6`
+  version ArchUnitNET.dll expects) are bundled to cover that gap under CoreCLR.
+- `System.Collections.Immutable.dll` — Mono's BCL doesn't ship this assembly but CoreCLR does;
+  bundling the same copy for both risks a duplicate-assembly load failure under CoreCLR, so a
+  second, newer .NET Standard 2.0 build lives at `Plugins/CoreCLR/System.Collections.Immutable.dll`.
+
+Each pair follows the same rule: the `Plugins/` copy loads when `UNITY_7000_0_OR_NEWER` and
+`ARCHUNIT_CORECLR` are both absent (Mono); the `Plugins/CoreCLR/` copy loads when either is defined.
 
 `UNITY_7000_0_OR_NEWER` is Unity's own auto-generated version define and covers Unity 7+, where
 Mono is gone. On Unity 6.7/6.8 with the experimental CoreCLR backend selected, add `ARCHUNIT_CORECLR`
@@ -82,11 +90,12 @@ to Project Settings → Player → Scripting Define Symbols yourself, since the 
 alone can't tell which backend is active there. `ScriptingBackend.IsMono` / `IsCoreClr` (in
 `HamerSoft.ArchUnitUnity.Editor`) give the same signal at runtime for diagnostics.
 
-**This split is prepared but not yet verified against a live CoreCLR Editor** — if
-`AsmdefAssemblyLoader.LoadArchitecture` (or `ArchLoader.Build()` directly) throws a
-`FileLoadException`/`TypeLoadException` mentioning `Collections.Immutable` under CoreCLR, the
-likely fix is to stop bundling a plugin for that backend entirely and rely on CoreCLR's inbox copy —
-flip the `Plugins/CoreCLR/System.Collections.Immutable.dll.meta` define constraints to never match.
+**The Mono.Cecil split is confirmed necessary** (it's what the live Editor actually hit first).
+**The System.Collections.Immutable split is still unverified** — if `AsmdefAssemblyLoader.LoadArchitecture`
+(or `ArchLoader.Build()` directly) throws a `FileLoadException`/`TypeLoadException` mentioning
+`Collections.Immutable` under CoreCLR, the likely fix is to stop bundling a plugin for that
+dependency entirely and rely on CoreCLR's inbox copy — flip the
+`Plugins/CoreCLR/System.Collections.Immutable.dll.meta` define constraints to never match.
 
 ## License
 
