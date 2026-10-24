@@ -12,27 +12,41 @@ The original Java library this package's API and concepts are based on.
 
 ## ArchUnitNET
 
-- Repository: https://github.com/TNG/ArchUnitNET
+- Repository: https://github.com/TNG/ArchUnitNET (published to NuGet as `TngTech.ArchUnitNET`;
+  the bare `ArchUnitNET` package id on NuGet.org belongs to an unrelated project)
 - License: Apache License 2.0
 
-The .NET port of ArchUnit (Mono.Cecil-based) bundled in `Plugins/` and wrapped by this package.
-`ArchUnitNET.dll` and `StronglyConnectedComponents.dll` target .NET Standard and are shared by
-both the Mono and CoreCLR scripting backends.
+The .NET port of ArchUnit this package wraps. `StronglyConnectedComponents.dll` is .NET Standard
+and shared unchanged by both scripting backends. `ArchUnitNET.dll` itself ships as two separate
+builds instead, one per backend (see `Plugins/CoreCLR/ArchUnitNET.dll` below) — never a single
+DLL patched to work both ways.
 
-## Mono.Cecil
+ArchUnitNET has a hard runtime dependency on Mono.Cecil for reading assembly metadata. Under Mono,
+this has always been satisfied implicitly by Unity's own `com.unity.nuget.mono-cecil` package —
+`Plugins/ArchUnitNET.dll` is the unmodified upstream build and still relies on that. That package
+is absent from Unity 7 projects, which under CoreCLR surfaced as Unity flagging `ArchUnitNET.dll`
+itself as a "broken assembly" at code-reload time (confirmed against a live Unity 7 alpha Editor).
+
+## Mono.Cecil (merged into Plugins/CoreCLR/ArchUnitNET.dll)
 
 - Repository: https://github.com/jbevain/cecil
 - License: MIT
 
-ArchUnitNET's hard runtime dependency for reading assembly metadata (`Mono.Cecil.dll` and
-`Mono.Cecil.Rocks.dll`, exact version `0.11.6`, read straight from `ArchUnitNET.dll`'s own
-AssemblyRef table). Under Mono, this has always been satisfied implicitly by Unity's own
-`com.unity.nuget.mono-cecil` package — this package never bundled it itself. That package is
-absent from Unity 7 projects, which under CoreCLR surfaces as Unity flagging `ArchUnitNET.dll`
-itself as a "broken assembly" at code-reload time (confirmed against a live Unity 7 alpha
-Editor). `Plugins/CoreCLR/Mono.Cecil.dll` and `Plugins/CoreCLR/Mono.Cecil.Rocks.dll` (the exact
-`0.11.6` .NET Standard 2.0 build) are bundled to cover that gap, gated the same way as
-`System.Collections.Immutable` below.
+`Mono.Cecil.dll` and `Mono.Cecil.Rocks.dll`, exact version `0.11.6` (read straight from
+`ArchUnitNET.dll`'s own AssemblyRef table) — the version ArchUnitNET already depends on. Rather
+than vendor these as loose DLLs into the project for CoreCLR, `Plugins/CoreCLR/ArchUnitNET.dll` is
+a separate build produced from the unmodified upstream `ArchUnitNET.dll` with Mono.Cecil and
+Mono.Cecil.Rocks merged directly into it via [ILRepack](https://github.com/gluck/il-repack) (MIT
+license) with `/internalize`, so the result carries no external `Mono.Cecil` reference at all:
+
+```
+ILRepack /out:ArchUnitNET.dll /internalize ArchUnitNET.dll Mono.Cecil.dll Mono.Cecil.Rocks.dll
+```
+
+Verified functionally equivalent to the unmerged build outside Unity (same classes discovered,
+same rule pass/fail results) before vendoring. `PluginImporter` `defineConstraints` on each
+`ArchUnitNET.dll.meta` pick exactly one of `Plugins/ArchUnitNET.dll` (Mono) or
+`Plugins/CoreCLR/ArchUnitNET.dll` (CoreCLR) at a time — see the README's "CoreCLR support" section.
 
 ## System.Collections.Immutable
 
