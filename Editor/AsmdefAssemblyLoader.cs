@@ -72,7 +72,7 @@ namespace HamerSoft.ArchUnitUnity.Editor
                     $"(Mono.Cecil, Mono.Cecil.Rocks, System.Collections.Immutable) under the " +
                     $"{(ScriptingBackend.IsCoreClr ? "CoreCLR" : "Mono")} scripting backend. Check that the " +
                     "right variant under Plugins/ vs Plugins/CoreCLR/ is enabled for this backend " +
-                    "(their .dll.meta define constraints gate on UNITY_7000_0_OR_NEWER / ARCHUNIT_CORECLR) " +
+                    "(their .dll.meta define constraints gate on UNITY_7000_0_OR_NEWER) " +
                     "and that nothing else in the project already loaded a conflicting copy of the same assembly.",
                     e);
             }
