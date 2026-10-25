@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using ArchUnitNET.Domain;
 using ArchUnitNET.Loader;
@@ -11,6 +12,9 @@ namespace HamerSoft.ArchUnitUnity.Editor
 {
     public static class AsmdefAssemblyLoader
     {
+        private static readonly string[] ArchUnitNetDependencyNames =
+            { "Mono.Cecil", "Collections.Immutable" };
+
         [Serializable]
         private class AsmdefName
         {
@@ -56,7 +60,26 @@ namespace HamerSoft.ArchUnitUnity.Editor
             foreach (var asmdefAsset in asmdefAssets)
                 loader.LoadAssembly(LoadAssembly(asmdefAsset));
 
-            return loader.Build();
+            try
+            {
+                return loader.Build();
+            }
+            catch (Exception e) when (e is FileLoadException or TypeLoadException &&
+                                       ArchUnitNetDependencyNames.Any(e.Message.Contains))
+            {
+                // Mono.Runtime only exists as a type under Mono; absence implies CoreCLR.
+                var isMono = System.Type.GetType("Mono.Runtime") != null;
+                throw new InvalidOperationException(
+                    "ArchUnitNET failed to load one of its runtime dependencies " +
+                    $"(Mono.Cecil, Mono.Cecil.Rocks, System.Collections.Immutable) under the " +
+                    $"{(isMono ? "Mono" : "CoreCLR")} scripting backend. Under Mono, Mono.Cecil comes " +
+                    "transitively from Unity's own com.unity.nuget.mono-cecil package; under CoreCLR, " +
+                    "Plugins/CoreCLR/Mono.Cecil.dll and Plugins/CoreCLR/Mono.Cecil.Rocks.dll supply it " +
+                    "instead (gated on UNITY_7000_0_OR_NEWER). System.Collections.Immutable has its own " +
+                    "Plugins/ vs Plugins/CoreCLR/ variant the same way. Check the relevant one is actually " +
+                    "enabled, and that nothing else in the project already loaded a conflicting copy.",
+                    e);
+            }
         }
     }
 }

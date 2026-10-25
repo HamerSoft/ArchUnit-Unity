@@ -12,7 +12,10 @@ The original Java library this package's API and concepts are based on.
 
 ## ArchUnitNET
 
-- Repository: https://github.com/TNG/ArchUnitNET
+- Repository: https://github.com/TNG/ArchUnitNET (published to NuGet as `TngTech.ArchUnitNET`;
+  the bare `ArchUnitNET` package id on NuGet.org belongs to an unrelated project)
 - License: Apache License 2.0
 
-The .NET port of ArchUnit (Mono.Cecil-based) bundled in `Plugins/` and wrapped by this package.
+The .NET port of ArchUnit this package wraps, bundled unmodified in `Plugins/` and shared by both
+the Mono and CoreCLR scripting backends. See the README's "CoreCLR support" section for how two of
+ArchUnitNET's own transitive dependencies are handled per backend.

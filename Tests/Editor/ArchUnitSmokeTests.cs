@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using ArchUnitNET.Domain;
 using ArchUnitNET.Domain.Extensions;
@@ -30,11 +31,20 @@ namespace HamerSoft.ArchUnitUnity.Tests
         }
 
         [Test]
-        public void Architecture_Loads_Via_Mono()
+        public void Architecture_Loads()
         {
             var architecture = BuildArchitecture();
 
             Assert.That(architecture.Classes.Any(c => c.FullName.Contains(nameof(SmokeTestAllowedClass))), Is.True);
+        }
+
+        [Test]
+        public void ScriptingBackend_IsDetected()
+        {
+            // Mono.Runtime only exists as a type under Mono; absence implies CoreCLR.
+            var isMono = System.Type.GetType("Mono.Runtime") != null;
+
+            TestContext.WriteLine($"Scripting backend: {(isMono ? "Mono" : "CoreCLR")}");
         }
 
         [Test]
