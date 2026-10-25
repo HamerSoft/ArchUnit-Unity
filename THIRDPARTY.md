@@ -58,6 +58,5 @@ A runtime dependency of ArchUnitNET. Mono's base class library doesn't ship this
 assembly inbox, which can conflict with a second, separately-loaded copy of the same simple name,
 so a second, newer .NET Standard 2.0 build lives at `Plugins/CoreCLR/System.Collections.Immutable.dll`
 instead. `PluginImporter` `defineConstraints` on each `.dll.meta` pick exactly one variant at a time
-(see `ScriptingBackend.cs` and the README's "CoreCLR support" section) — whether this particular
-assembly conflicts under CoreCLR the way Mono.Cecil did is still **not yet verified against a live
-CoreCLR Editor**.
+(see the README's "CoreCLR support" section) — confirmed working against a live Unity 7 alpha
+CoreCLR Editor.

@@ -67,10 +67,12 @@ namespace HamerSoft.ArchUnitUnity.Editor
             catch (Exception e) when (e is FileLoadException or TypeLoadException &&
                                        ArchUnitNetDependencyNames.Any(e.Message.Contains))
             {
+                // Mono.Runtime only exists as a type under Mono; absence implies CoreCLR.
+                var isMono = Type.GetType("Mono.Runtime") != null;
                 throw new InvalidOperationException(
                     "ArchUnitNET failed to load one of its bundled dependencies " +
                     $"(Mono.Cecil, Mono.Cecil.Rocks, System.Collections.Immutable) under the " +
-                    $"{(ScriptingBackend.IsCoreClr ? "CoreCLR" : "Mono")} scripting backend. Check that the " +
+                    $"{(isMono ? "Mono" : "CoreCLR")} scripting backend. Check that the " +
                     "right variant under Plugins/ vs Plugins/CoreCLR/ is enabled for this backend " +
                     "(their .dll.meta define constraints gate on UNITY_7000_0_OR_NEWER) " +
                     "and that nothing else in the project already loaded a conflicting copy of the same assembly.",
