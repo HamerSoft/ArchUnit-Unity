@@ -1,11 +1,11 @@
 # ArchUnit-Unity
 
-[ArchUnitNET](https://github.com/TNG/ArchUnitNET) wrapped for Unity's test framework, so you can write architecture tests (layering rules, dependency constraints, naming conventions, ...) as regular EditMode tests.
+[ArchUnitNET](https://github.com/TNG/ArchUnitNET) wrapped for Unity's test framework, so you can write architecture tests (layering rules, dependency constraints, naming conventions, ...) as regular EditMode tests. Works on both the Mono and CoreCLR scripting backends.
 
 ## Requirements
 
 - Unity 2021.2+ (.NET Standard 2.1 API compatibility)
-- Mono or CoreCLR scripting backend (see [CoreCLR support](#coreclr-support) below)
+- Mono or CoreCLR scripting backend — both are supported transparently, nothing to configure (see [CoreCLR support](#coreclr-support) below for the mechanics)
 
 ## Install
 
@@ -64,10 +64,10 @@ Types().That().ResideInAssembly(editor)
 
 ## CoreCLR support
 
-Unity 7 removes the Mono-based Editor in favor of CoreCLR; Unity 6.7/6.8 offer CoreCLR as an
-experimental, opt-in backend alongside Mono. `StronglyConnectedComponents.dll` is .NET Standard
-and shared unchanged by both backends, but `ArchUnitNET.dll` and `System.Collections.Immutable.dll`
-each need a different build per backend, so this package ships two full copies of each, gated by
+This package works on both the Mono and CoreCLR scripting backends — nothing to configure, no
+source-level differences. `StronglyConnectedComponents.dll` is .NET Standard and shared unchanged
+by both backends, but `ArchUnitNET.dll` and `System.Collections.Immutable.dll` each need a
+different build per backend, so this package ships two full copies of each, gated by
 `PluginImporter` define constraints — never a single shared copy patched to work both ways:
 
 - **`ArchUnitNET.dll`** has a hard runtime dependency on `Mono.Cecil`/`Mono.Cecil.Rocks` for
