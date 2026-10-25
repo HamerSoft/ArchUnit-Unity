@@ -42,7 +42,7 @@ namespace HamerSoft.ArchUnitUnity.Tests
         public void ScriptingBackend_IsDetected()
         {
             // Mono.Runtime only exists as a type under Mono; absence implies CoreCLR.
-            var isMono = Type.GetType("Mono.Runtime") != null;
+            var isMono = System.Type.GetType("Mono.Runtime") != null;
 
             TestContext.WriteLine($"Scripting backend: {(isMono ? "Mono" : "CoreCLR")}");
         }

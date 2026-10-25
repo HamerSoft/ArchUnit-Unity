@@ -68,7 +68,7 @@ namespace HamerSoft.ArchUnitUnity.Editor
                                        ArchUnitNetDependencyNames.Any(e.Message.Contains))
             {
                 // Mono.Runtime only exists as a type under Mono; absence implies CoreCLR.
-                var isMono = Type.GetType("Mono.Runtime") != null;
+                var isMono = System.Type.GetType("Mono.Runtime") != null;
                 throw new InvalidOperationException(
                     "ArchUnitNET failed to load one of its bundled dependencies " +
                     $"(Mono.Cecil, Mono.Cecil.Rocks, System.Collections.Immutable) under the " +
