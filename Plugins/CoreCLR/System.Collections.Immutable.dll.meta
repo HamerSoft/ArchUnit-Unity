@@ -7,7 +7,7 @@ PluginImporter:
   executionOrder: {}
   defineConstraints:
   - UNITY_INCLUDE_TESTS
-  - UNITY_7000_0_OR_NEWER,ARCHUNIT_CORECLR
+  - UNITY_7000_0_OR_NEWER
   isPreloaded: 0
   isOverridable: 1
   isExplicitlyReferenced: 0
@@ -60,8 +60,9 @@ PluginImporter:
       settings:
         AddToEmbeddedBinaries: false
         CPU: AnyCPU
-        CompileFlags:
-        FrameworkDependencies:
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+        CompileFlags: 
+        FrameworkDependencies: 
+        XcodeProjectType: All
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

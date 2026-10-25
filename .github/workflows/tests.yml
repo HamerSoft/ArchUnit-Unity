@@ -34,3 +34,8 @@ jobs:
         with:
           name: EditMode test results
           path: editmode-artifacts
+
+  # A Unity 7 (CoreCLR) job was attempted here but dropped: game-ci's unityci/editor
+  # Docker image registry has no images for any Unity 7000.x alpha build yet (checked
+  # Docker Hub directly - 0 tags matching "7000"), so there's nothing to pull in CI.
+  # Revisit once game-ci or Unity ships something CI-friendly for the 7.x alpha channel.
