@@ -70,12 +70,14 @@ namespace HamerSoft.ArchUnitUnity.Editor
                 // Mono.Runtime only exists as a type under Mono; absence implies CoreCLR.
                 var isMono = System.Type.GetType("Mono.Runtime") != null;
                 throw new InvalidOperationException(
-                    "ArchUnitNET failed to load one of its bundled dependencies " +
+                    "ArchUnitNET failed to load one of its runtime dependencies " +
                     $"(Mono.Cecil, Mono.Cecil.Rocks, System.Collections.Immutable) under the " +
-                    $"{(isMono ? "Mono" : "CoreCLR")} scripting backend. Check that the " +
-                    "right variant under Plugins/ vs Plugins/CoreCLR/ is enabled for this backend " +
-                    "(their .dll.meta define constraints gate on UNITY_7000_0_OR_NEWER) " +
-                    "and that nothing else in the project already loaded a conflicting copy of the same assembly.",
+                    $"{(isMono ? "Mono" : "CoreCLR")} scripting backend. Under Mono, Mono.Cecil comes " +
+                    "transitively from Unity's own com.unity.nuget.mono-cecil package; under CoreCLR, " +
+                    "Plugins/CoreCLR/Mono.Cecil.dll and Plugins/CoreCLR/Mono.Cecil.Rocks.dll supply it " +
+                    "instead (gated on UNITY_7000_0_OR_NEWER). System.Collections.Immutable has its own " +
+                    "Plugins/ vs Plugins/CoreCLR/ variant the same way. Check the relevant one is actually " +
+                    "enabled, and that nothing else in the project already loaded a conflicting copy.",
                     e);
             }
         }

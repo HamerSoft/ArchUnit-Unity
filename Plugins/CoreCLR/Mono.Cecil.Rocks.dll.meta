@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 07695c4970d7c2621b895043d983781b
+guid: 9635c6764d204b93a4cbc3fa6302fdaa
 PluginImporter:
   externalObjects: {}
   serializedVersion: 3
@@ -60,9 +60,9 @@ PluginImporter:
       settings:
         AddToEmbeddedBinaries: false
         CPU: AnyCPU
-        CompileFlags: 
-        FrameworkDependencies: 
+        CompileFlags:
+        FrameworkDependencies:
         XcodeProjectType: All
-  userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  userData:
+  assetBundleName:
+  assetBundleVariant:
