@@ -12,7 +12,11 @@ namespace HamerSoft.ArchUnitUnity.Editor
 
         internal PackageAssemblies(string packageName)
         {
+#if UNITY_6000_0_OR_NEWER
+            _package = PackageInfo.FindForPackageName(packageName);
+#else
             _package = PackageInfo.GetAllRegisteredPackages().FirstOrDefault(p => p.name == packageName);
+#endif
         }
 
         public Assembly Runtime => Resolve("Runtime");
