@@ -72,12 +72,12 @@ namespace HamerSoft.ArchUnitUnity.Editor
                 throw new InvalidOperationException(
                     "ArchUnitNET failed to load one of its runtime dependencies " +
                     $"(Mono.Cecil, Mono.Cecil.Rocks, System.Collections.Immutable) under the " +
-                    $"{(isMono ? "Mono" : "CoreCLR")} scripting backend. Under Mono, Mono.Cecil comes " +
-                    "transitively from Unity's own com.unity.nuget.mono-cecil package; under CoreCLR, " +
-                    "Plugins/CoreCLR/Mono.Cecil.dll and Plugins/CoreCLR/Mono.Cecil.Rocks.dll supply it " +
-                    "instead (gated on UNITY_7000_0_OR_NEWER). System.Collections.Immutable has its own " +
-                    "Plugins/ vs Plugins/CoreCLR/ variant the same way. Check the relevant one is actually " +
-                    "enabled, and that nothing else in the project already loaded a conflicting copy.",
+                    $"{(isMono ? "Mono" : "CoreCLR")} scripting backend. Mono.Cecil comes from this " +
+                    "package's com.unity.nuget.mono-cecil dependency (same DLLs on both backends) - " +
+                    "make sure Package Manager actually resolved it. System.Collections.Immutable has a " +
+                    "Plugins/ vs Plugins/CoreCLR/ variant gated on UNITY_7000_0_OR_NEWER; check the " +
+                    "relevant one is enabled and that nothing else in the project already loaded a " +
+                    "conflicting copy.",
                     e);
             }
         }
