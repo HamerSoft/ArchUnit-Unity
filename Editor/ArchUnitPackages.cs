@@ -12,7 +12,7 @@ namespace HamerSoft.ArchUnitUnity.Editor
 
         internal PackageAssemblies(string packageName)
         {
-            _package = PackageInfo.FindForPackageName(packageName);
+            _package = PackageInfo.GetAllRegisteredPackages().FirstOrDefault(p => p.name == packageName);
         }
 
         public Assembly Runtime => Resolve("Runtime");
