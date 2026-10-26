@@ -24,7 +24,8 @@
     "email": "r.hamers@hamersoft.com"
   },
   "dependencies": {
-    "com.unity.nuget.newtonsoft-json": "3.2.2"
+    "com.unity.nuget.newtonsoft-json": "3.2.2",
+    "com.unity.nuget.mono-cecil": "1.11.6"
   },
   "hideInEditor": false
 }
